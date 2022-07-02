@@ -9,6 +9,10 @@ plugins {
 android {
     compileSdk 32
 
+    lintOptions {
+        disable 'NullSafeMutableLiveData'
+    }
+
     defaultConfig {
         applicationId "ru.netology.nmedia"
         minSdk 23

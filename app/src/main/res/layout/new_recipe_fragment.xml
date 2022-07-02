@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recipe"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.NewOrEditedRecipeFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:autofillHints=""
+            android:hint="@string/name_hint"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:minHeight="48dp"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="8dp" />
+
+        <EditText
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:hint="@string/content_hint"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:minHeight="48dp"
+            android:textColorHint="#757575"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            tools:layout_editor_absoluteX="8dp" />
+
+        <RadioGroup
+            android:id="@+id/categoryRecipeCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/content">
+
+            <RadioButton
+                android:id="@+id/checkBoxEuropean"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/european_type" />
+
+            <RadioButton
+                android:id="@+id/checkBoxAsian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/asian_type" />
+
+            <RadioButton
+                android:id="@+id/checkBoxPanasian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/panasian_type" />
+
+            <RadioButton
+                android:id="@+id/checkBoxEastern"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/eastern_type" />
+
+            <RadioButton
+                android:id="@+id/checkBoxAmerican"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/american_type" />
+
+            <RadioButton
+                android:id="@+id/checkBoxRussian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/russian_type" />
+
+            <RadioButton
+                android:id="@+id/checkBoxMediterranean"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mediterranean_type" />
+
+        </RadioGroup>
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottomAppBar"
+            style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            app:layout_constraintTop_toBottomOf="@+id/categoryRecipeCheckBox"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:ignore="BottomAppBar" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:contentDescription="@string/recipe_save"
+            app:layout_constraintBottom_toTopOf="@id/bottomAppBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ic_ok_24"
+            tools:ignore="MissingConstraints" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

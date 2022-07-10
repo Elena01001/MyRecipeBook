@@ -7,6 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import ru.netology.nerecipe.adapter.RecipeInteractionListener
 import ru.netology.nerecipe.data.InMemoryRecipeRepositoryImpl
 import ru.netology.nerecipe.data.RecipeRepository
+import ru.netology.nerecipe.data.RoomRecipeRepositoryImpl
+import ru.netology.nerecipe.db.AppDb
+import ru.netology.nerecipe.dto.Category
 import ru.netology.nerecipe.dto.Recipe
 import ru.netology.nerecipe.util.SingleLiveEvent
 import java.util.*
@@ -14,7 +17,11 @@ import java.util.*
 class RecipeViewModel(
     application: Application
 ) : AndroidViewModel(application), RecipeInteractionListener {
-    private val repository: RecipeRepository = InMemoryRecipeRepositoryImpl
+
+    //private val repository: RecipeRepository = InMemoryRecipeRepositoryImpl
+    private val repository: RecipeRepository = RoomRecipeRepositoryImpl(
+        dao = AppDb.getInstance(context = application).recipeDao
+    )
 
     val data get() = repository.data
 
@@ -50,7 +57,7 @@ class RecipeViewModel(
         val newRecipe = currentRecipe.value?.copy( // создание копии рец с новым содержимым
             content = recipe.content,
             name = recipe.name,
-            category = recipe.category
+            category = recipe.category // TODO проблема, мне нужен enum класс Категорий, наверное нужен еще 1 поток для категорий
         ) ?: Recipe(
             id = RecipeRepository.NEW_RECIPE_ID,
             author = "Автор: Елена Смелкова",
@@ -98,7 +105,7 @@ class RecipeViewModel(
                 }
                 return@filter false
             }
-            val listFavorite = if (favoriteFilter.value==true) list?.filter{recipe->
+            val listFavorite = if (favoriteFilter.value == true) list?.filter { recipe ->
                 recipe.addedToFavourites
             } else list
             filteredRecipes.value = listFavorite

@@ -9,6 +9,7 @@ import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.adapter.RecipesAdapter
@@ -17,6 +18,7 @@ import ru.netology.nerecipe.dto.Recipe
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
 class FeedFragment : Fragment() {
+    private lateinit var navController: NavController
 
     private val viewModel: RecipeViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
@@ -65,6 +67,7 @@ class FeedFragment : Fragment() {
         binding.fab.setOnClickListener {
             viewModel.onAddButtonClicked()
         }
+
 
         val searchItem = binding.search
         searchItem.imeOptions = EditorInfo.IME_ACTION_DONE

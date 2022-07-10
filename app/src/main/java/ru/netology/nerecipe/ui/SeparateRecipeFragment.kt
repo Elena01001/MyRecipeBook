@@ -42,7 +42,7 @@ class SeparateRecipeFragment : Fragment() {
 
         //организация перехода к фрагменту NewOrEditedRecipeFragment
         separateRecipeViewModel.navigateToRecipeContentScreenEvent.observe(viewLifecycleOwner) { recipe ->
-            val direction = FeedFragmentDirections.actionFeedFragmentToNewRecipeFragment(recipe)
+            val direction = SeparateRecipeFragmentDirections.actionSeparateRecipeFragmentToNewOrEditedRecipeFragment(recipe)
             findNavController().navigate(direction)
         }
 

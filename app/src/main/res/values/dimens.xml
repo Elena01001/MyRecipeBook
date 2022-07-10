@@ -6,5 +6,6 @@
     <dimen name="icon_button_min_size">32dp</dimen>
     <dimen name="icon_button_padding_size">12dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="ok_margin">20dp</dimen>
     <dimen name="little_spacing">4dp</dimen>
 </resources>

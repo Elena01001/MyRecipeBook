@@ -22,5 +22,6 @@
     <string name="name_hint">Title</string>
     <string name="author_name_hint">Author name</string>
     <string name="content_hint">Content</string>
+    <string name="text_empty_list">Oops! Nothing has been selected yet</string>
     />
 </resources>

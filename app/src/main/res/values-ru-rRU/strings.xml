@@ -23,5 +23,6 @@
     <string name="name_hint">Название</string>
     <string name="author_name_hint">Автор</string>
     <string name="content_hint">Содержание рецепта</string>
+    <string name="text_empty_list">Ой! Здесь пока ничего нет</string>
     />
 </resources>

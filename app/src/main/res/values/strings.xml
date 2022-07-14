@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NeRecipe</string>
+    <string name="app_name">Recipe Book</string>
     <string name="hello">Hello World!</string>
     <string name="avatar_description">Avatar description</string>
     <string name="description_post_menu">Post menu</string>

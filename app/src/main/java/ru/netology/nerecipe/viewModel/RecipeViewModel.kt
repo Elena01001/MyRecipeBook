@@ -38,26 +38,14 @@ class RecipeViewModel(
     init {
         favoriteFilter.value = false
 
-        filteredRecipes.addSource(data) {
-            multiFilter()
-        }
-        filteredRecipes.addSource(searchQuery) {
-            multiFilter()
-        }
-        filteredRecipes.addSource(categoriesList) {
-            multiFilter()
-        }
-        filteredRecipes.addSource(favoriteFilter) {
-            multiFilter()
-        }
     }
 
     fun onSaveButtonClicked(recipe: Recipe) { // нужно научить, когда пришел новый рец, а когда неновый для редактирования
-        if (recipe.content.isBlank() && recipe.name.isBlank() && recipe.category.isBlank()) return
+        if (recipe.content.isBlank() && recipe.name.isBlank()) return
         val newRecipe = currentRecipe.value?.copy( // создание копии рец с новым содержимым
             content = recipe.content,
             name = recipe.name,
-            category = recipe.category // TODO проблема, мне нужен enum класс Категорий, наверное нужен еще 1 поток для категорий
+            category = recipe.category //
         ) ?: Recipe(
             id = RecipeRepository.NEW_RECIPE_ID,
             author = "Автор: Елена Смелкова",
@@ -94,23 +82,10 @@ class RecipeViewModel(
         navigateToRecipeContentScreenEvent.value = recipe
     }
 
-    private fun multiFilter() {
-        val searchText = searchQuery.value?.lowercase(Locale.getDefault())?.trim { it <= ' ' } ?: ""
-        if (searchText.isNotEmpty() || data.value != null || categoriesList.value != null) {
-            val list = data.value?.filter { recipe ->
-                recipe.name.lowercase(Locale.getDefault()).contains(searchText)
-            }?.filter {
-                it.categories.forEach { categoryName ->
-                    if (categoriesList.value!!.contains(categoryName)) return@filter true
-                }
-                return@filter false
-            }
-            val listFavorite = if (favoriteFilter.value == true) list?.filter { recipe ->
-                recipe.addedToFavourites
-            } else list
-            filteredRecipes.value = listFavorite
-        } else {
-            filteredRecipes.value = data.value
-        }
+    fun showRecipesByCategories(category: Category) {
+        repository.getCategory(category)
+
     }
+
+
 }

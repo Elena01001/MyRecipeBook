@@ -9,7 +9,6 @@ fun RecipeEntity.toModel() = Recipe(
     author = author,
     content = content,
     category = category,
-    //categories = categories,
     addedToFavourites = addedToFavourites,
     foodImage = foodImage
 )
@@ -20,9 +19,6 @@ fun Recipe.toEntity() = RecipeEntity(
     author = author,
     content = content,
     category = category,
-   // categories = categories,
     addedToFavourites = addedToFavourites,
     foodImage = foodImage
 )
-
- //TODO не удается также сделать с категориями, пишет, что enum classes cannot be instantiated

@@ -77,7 +77,7 @@ class RecipesAdapter(
             with(binding) {
                 name.text = recipe.name
                 authorName.text = recipe.author
-                category.text = recipe.category
+                category.text = recipe.category.toString()
                 favourite.isChecked = recipe.addedToFavourites
             }
         }

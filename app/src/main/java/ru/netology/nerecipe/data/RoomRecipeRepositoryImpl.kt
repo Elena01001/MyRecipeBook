@@ -4,6 +4,7 @@ import androidx.lifecycle.map
 import ru.netology.nerecipe.db.RecipeDao
 import ru.netology.nerecipe.db.toEntity
 import ru.netology.nerecipe.db.toModel
+import ru.netology.nerecipe.dto.Category
 import ru.netology.nerecipe.dto.Recipe
 
 class RoomRecipeRepositoryImpl(
@@ -34,5 +35,9 @@ class RoomRecipeRepositoryImpl(
         data = dao.getAll().map { entities ->
             entities.map { it.toModel() }
         }
+    }
+
+    override fun getCategory(category: Category) {
+        dao.getCategory(category)
     }
 }

@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import ru.netology.nerecipe.data.RecipeRepository
+import ru.netology.nerecipe.dto.Category
 
 @Dao
 interface RecipeDao {
@@ -18,7 +19,7 @@ interface RecipeDao {
     @Query("UPDATE recipes SET name = :name, content = :content, category = :category WHERE id = :id")
     fun updateById(
         id: Long, name: String,
-        category: String, content: String
+        content: String, category: Category
     )
 
     fun save(recipe: RecipeEntity) =
@@ -40,6 +41,9 @@ interface RecipeDao {
 
     @Query("SELECT * FROM recipes WHERE name LIKE '%' || :text || '%'")
     fun search(text: String): LiveData<List<RecipeEntity>>
+
+    @Query("SELECT * FROM recipes WHERE category = :categoryRecipe")
+    fun getCategory(categoryRecipe: Category): LiveData<List<RecipeEntity>>
 
 
 }

@@ -2,6 +2,7 @@ package ru.netology.nerecipe.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import ru.netology.nerecipe.dto.Category
 import ru.netology.nerecipe.dto.Recipe
 
 object InMemoryRecipeRepositoryImpl : RecipeRepository {
@@ -12,7 +13,7 @@ object InMemoryRecipeRepositoryImpl : RecipeRepository {
             id = nextId++,
             name = "Карбонара",
             author = "Автор: Юлия Высоцкая",
-            category = "Европейская",
+            category = Category.European,
             content = "1. Бекон нарезаем соломкой. Чеснок продавливаем через чеснокодавку или мелко нарезаем.\n" +
                     "\n" +
                     "2. На сковороде разогреваем немного растительного масла и на нём слегка обжариваем чеснок. Далее добавляем бекон и хорошо обжариваем.\n" +
@@ -33,7 +34,7 @@ object InMemoryRecipeRepositoryImpl : RecipeRepository {
             id = nextId++,
             name = "Том Ям",
             author = "Автор: Kulinarista",
-            category = "Азиатская",
+            category = Category.Asian,
             content = "1. Готовим бульон без соли (или используем 1 бульонный кубик на 0,5 литра воды).\n" +
                     "\n" +
                     "2. Добавляем приправы: стебли лемонграсса (или цедру лайма), нарезанный галангал, листья каффира. Провариваем все 3-5 минут и вылавливаем из бульона.\n" +
@@ -51,7 +52,7 @@ object InMemoryRecipeRepositoryImpl : RecipeRepository {
             id = nextId++,
             name = "Блины",
             author = "Автор: Семейный Очаг",
-            category = "Русская",
+            category = Category.Russian,
             content = "Шаг 1.\n" +
                     "\n" +
                     "В глубокую посуду вбиваем яйца, сразу сахар, соль и молоко. Взбиваем все венчиком или миксером.\n" +
@@ -77,7 +78,7 @@ object InMemoryRecipeRepositoryImpl : RecipeRepository {
             id = nextId++,
             name = "Пшенная каша на молоке",
             author = "Автор: Лефуд",
-            category = "Русская",
+            category = Category.Russian,
             content = "Шаг 1.\n" +
                     "\n" +
                     "Пшено промойте под проточной водой и всыпьте в чашу мультиварки.\n" +
@@ -129,6 +130,13 @@ object InMemoryRecipeRepositoryImpl : RecipeRepository {
 
     override fun getAllRecipes() {
          data.value = recipes
+    }
+
+    override fun getCategory(category: Category) {
+        recipes.find {
+            it.category == category
+        }
+        data.value = recipes
     }
 
     private fun update(recipe: Recipe) {

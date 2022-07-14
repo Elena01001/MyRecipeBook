@@ -22,8 +22,8 @@ import ru.netology.nerecipe.viewModel.RecipeViewModel
 
 class AppActivity : AppCompatActivity() {
 
-    private lateinit var navController: NavController
-    private lateinit var appBarConfiguration: AppBarConfiguration
+    /*private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration*/
 
     /* private val viewModel: RecipeViewModel by viewModels()
      private val feedFragment = FeedFragment()*/
@@ -40,43 +40,24 @@ class AppActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.setupWithNavController(navController)
 
-        // Setup the ActionBar with navController and 3 top level destinations
-        appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.recipeList, R.id.filter, R.id.favourites)
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-
+//        // Setup the ActionBar with navController and 3 top level destinations
+//        appBarConfiguration = AppBarConfiguration(
+//            setOf(R.id.feedFragment, R.id.categoryFilterFragment, R.id.favouriteRecipeFragment)
+//        )
+//        setupActionBarWithNavController(navController, appBarConfiguration)
+//
         navController.addOnDestinationChangedListener { _, _, arguments ->
             binding.bottomNavigation.isVisible =
                 arguments?.getBoolean("ShowAppBar", false) == true
         }
 
-
-        binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.recipeList -> {
-                    //TODO НАВИГИРОВАТЬСЯ НА FEEDFRAGMENT
-
-                    true
-                }
-                R.id.favourites -> {
-                    //TODO НАВИГИРОВАТЬСЯ НА FAVOURITEFRAGMENT
-
-                    true
-                }
-                R.id.filter -> {
-                    //TODO НАВИГИРОВАТЬСЯ НА FILTEREDFRAGMENT
-
-                    true
-                }
-                else -> false
-            }
-        }
     }
+/*
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration)
     }
+*/
 
 
 }

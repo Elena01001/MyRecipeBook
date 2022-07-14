@@ -42,13 +42,13 @@ class NewOrEditedRecipeFragment : Fragment() {
                 categoryRecipeCheckBox.check(R.id.checkBoxAmerican)
                 categoryRecipeCheckBox.check(R.id.checkBoxRussian)
                 categoryRecipeCheckBox.check(R.id.checkBoxMediterranean)
-                checkBoxEuropean.text = Category.European.label
-                checkBoxAsian.text = Category.Asian.label
-                checkBoxPanasian.text = Category.PanAsian.label
-                checkBoxEastern.text = Category.Eastern.label
-                checkBoxAmerican.text = Category.American.label
-                checkBoxRussian.text = Category.Russian.label
-                checkBoxMediterranean.text = Category.Mediterranean.label
+                checkBoxEuropean.text = Category.European.toString()
+                checkBoxAsian.text = Category.Asian.toString()
+                checkBoxPanasian.text = Category.PanAsian.toString()
+                checkBoxEastern.text = Category.Eastern.toString()
+                checkBoxAmerican.text = Category.American.toString()
+                checkBoxRussian.text = Category.Russian.toString()
+                checkBoxMediterranean.text = Category.Mediterranean.toString()
             }
         }
 
@@ -76,9 +76,9 @@ class NewOrEditedRecipeFragment : Fragment() {
             id = args.currentRecipe?.id ?: RecipeRepository.NEW_RECIPE_ID,
             name = binding.name.text.toString(),
             content = binding.content.text.toString(),
-            category = binding.categoryRecipeCheckBox.toString()
+            category = Category.valueOf(binding.categoryRecipeCheckBox.toString())
         )
-        if (!emptyFieldsCheck(recipe = currentRecipe)) {
+        if (emptyFieldsCheck(recipe = currentRecipe)) {
             val resultBundle = Bundle(1)
             resultBundle.putParcelable(RESULT_KEY, currentRecipe)
             setFragmentResult(REQUEST_KEY, resultBundle)
@@ -88,7 +88,7 @@ class NewOrEditedRecipeFragment : Fragment() {
 
 
     private fun emptyFieldsCheck(recipe: Recipe): Boolean {
-        return if (recipe.name.isBlank() || recipe.content.isBlank() || recipe.category.isBlank()) {
+        return if (recipe.name.isBlank() && recipe.content.isBlank()) {
             Toast.makeText(activity, "Заполните все поля", Toast.LENGTH_LONG).show()
             false
         } else true
@@ -97,7 +97,7 @@ class NewOrEditedRecipeFragment : Fragment() {
     // чтобы передавать данные между фрагментами
     companion object {
         const val REQUEST_KEY = "requestKey"
-        const val RESULT_KEY = "postNewContent"
+        const val RESULT_KEY = "newContent"
     }
 }
 

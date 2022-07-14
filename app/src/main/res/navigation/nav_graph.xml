@@ -59,6 +59,12 @@
         <argument
             android:name="ShowAppBar"
             android:defaultValue="true" />
+        <action
+            android:id="@+id/action_favouriteRecipeFragment_to_separateRecipeFragment"
+            app:destination="@id/separateRecipeFragment" />
+        <action
+            android:id="@+id/action_favouriteRecipeFragment_to_newOrEditedRecipeFragment"
+            app:destination="@id/newOrEditedRecipeFragment" />
 
     </fragment>
     <fragment
@@ -66,9 +72,27 @@
         android:name="ru.netology.nerecipe.ui.CategoryFilterFragment"
         android:label="CategoryFilterFragment"
         tools:layout="@layout/category_filters">
+        <argument
+            android:name="ShowAppBar"
+            android:defaultValue="true" />
         <action
             android:id="@+id/action_categoryFilterFragment_to_feedFragment"
             app:destination="@id/feedFragment" />
+        <action
+            android:id="@+id/action_categoryFilterFragment_to_filterResultFragment"
+            app:destination="@id/filterResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/filterResultFragment"
+        android:name="ru.netology.nerecipe.ui.FilterResultFragment"
+        android:label="FilterResultFragment"
+        tools:layout="@layout/favourite_fragment">
+        <action
+            android:id="@+id/action_filterResultFragment_to_separateRecipeFragment"
+            app:destination="@id/separateRecipeFragment" />
+        <action
+            android:id="@+id/action_filterResultFragment_to_newOrEditedRecipeFragment"
+            app:destination="@id/newOrEditedRecipeFragment" />
     </fragment>
 
 

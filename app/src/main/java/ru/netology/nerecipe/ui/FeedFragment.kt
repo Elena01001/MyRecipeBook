@@ -18,7 +18,6 @@ import ru.netology.nerecipe.dto.Recipe
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
 class FeedFragment : Fragment() {
-    private lateinit var navController: NavController
 
     private val viewModel: RecipeViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
@@ -68,10 +67,8 @@ class FeedFragment : Fragment() {
             viewModel.onAddButtonClicked()
         }
 
-
-        val searchItem = binding.search
-        searchItem.imeOptions = EditorInfo.IME_ACTION_DONE
-        searchItem.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+        val search = binding.search
+        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -79,9 +76,19 @@ class FeedFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.searchQuery.value = newText
+                if (newText.isNullOrEmpty()) {
+                    adapter.submitList(viewModel.data.value)
+                    return true
+                }
+                var recipeList = adapter.currentList
+                recipeList = recipeList.filter { recipe ->
+                    recipe.name.lowercase().contains(newText.lowercase())
+                }
+                viewModel.searchRecipeByName(newText)
+                adapter.submitList(recipeList)
                 return true
             }
+
         })
 
         }.root

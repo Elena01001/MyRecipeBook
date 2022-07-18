@@ -20,14 +20,14 @@ data class Recipe(
 
 @Serializable
 @Parcelize
-enum class Category(val label: String): Parcelable {
-    European(R.string.european_type.toString()),
-    Asian(R.string.asian_type.toString()),
-    PanAsian(R.string.panasian_type.toString()),
-    Eastern(R.string.eastern_type.toString()),
-    American(R.string.american_type.toString()),
-    Russian(R.string.russian_type.toString()),
-    Mediterranean(R.string.mediterranean_type.toString())
+enum class Category: Parcelable {
+    European,
+    Asian,
+    PanAsian,
+    Eastern,
+    American,
+    Russian,
+    Mediterranean
 }
 
 

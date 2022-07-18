@@ -1,7 +1,8 @@
 package ru.netology.nerecipe.adapter
 
+
+import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
@@ -9,7 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.databinding.RecipeBinding
-import ru.netology.nerecipe.databinding.SeparateRecipeViewBinding
+import ru.netology.nerecipe.dto.Category
 import ru.netology.nerecipe.dto.Recipe
 
 class RecipesAdapter(
@@ -29,11 +30,8 @@ class RecipesAdapter(
 
     class ViewHolder(
         private val binding: RecipeBinding,
-
         listener: RecipeInteractionListener
     ) : RecyclerView.ViewHolder(binding.root) {
-
-
 
         private lateinit var recipe: Recipe
 
@@ -77,7 +75,7 @@ class RecipesAdapter(
             with(binding) {
                 name.text = recipe.name
                 authorName.text = recipe.author
-                category.text = recipe.category.toString()
+                category.text = category.context.showCategories(recipe.category)
                 favourite.isChecked = recipe.addedToFavourites
             }
         }
@@ -93,3 +91,17 @@ class RecipesAdapter(
             oldItem == newItem
     }
 }
+
+fun Context.showCategories(category: Category): String {
+    return when (category) {
+        Category.European -> getString(R.string.european_type)
+        Category.Asian -> getString(R.string.asian_type)
+        Category.PanAsian -> getString(R.string.panasian_type)
+        Category.Eastern -> getString(R.string.eastern_type)
+        Category.American -> getString(R.string.american_type)
+        Category.Russian -> getString(R.string.russian_type)
+        Category.Mediterranean -> getString(R.string.mediterranean_type)
+    }
+}
+
+

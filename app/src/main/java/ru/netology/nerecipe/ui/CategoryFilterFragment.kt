@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nerecipe.adapter.RecipesAdapter
+import ru.netology.nerecipe.adapter.showCategories
 import ru.netology.nerecipe.databinding.CategoryFiltersBinding
 import ru.netology.nerecipe.databinding.NewRecipeFragmentBinding
 import ru.netology.nerecipe.dto.Category
@@ -22,57 +23,59 @@ class CategoryFilterFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = CategoryFiltersBinding.inflate(layoutInflater, container, false).also { binding ->
 
-
         with(binding) {
-            checkBoxEuropean.text = Category.European.toString()
-            checkBoxAsian.text = Category.Asian.toString()
-            checkBoxPanasian.text = Category.PanAsian.toString()
-            checkBoxEastern.text = Category.Eastern.toString()
-            checkBoxAmerican.text = Category.American.toString()
-            checkBoxRussian.text = Category.Russian.toString()
-            checkBoxMediterranean.text = Category.Mediterranean.toString()
+            checkBoxEuropean.text = checkBoxEuropean.context.showCategories(Category.European)
+            checkBoxAsian.text = checkBoxAsian.context.showCategories(Category.Asian)
+            checkBoxPanasian.text = checkBoxPanasian.context.showCategories(Category.PanAsian)
+            checkBoxEastern.text = checkBoxEastern.context.showCategories(Category.Eastern)
+            checkBoxAmerican.text = checkBoxAmerican.context.showCategories(Category.American)
+            checkBoxRussian.text = checkBoxRussian.context.showCategories(Category.Russian)
+            checkBoxMediterranean.text =
+                checkBoxMediterranean.context.showCategories(Category.Mediterranean)
 
             binding.ok.setOnClickListener {
                 onOkButtonClicked(binding)
             }
         }
+
     }.root
 
-    private fun onOkButtonClicked(binding: CategoryFiltersBinding) {
-        var checkedCount = 0
-        val numberOfFilters = 7
+    fun onOkButtonClicked(binding: CategoryFiltersBinding): List<Category> {
 
-        if (!binding.checkBoxEuropean.isChecked) {
-            ++checkedCount
+        val categoryList = arrayListOf<Category>()
+
+        if (binding.checkBoxEuropean.isChecked) {
             categoryFilterViewModel.showRecipesByCategories(Category.European)
+            categoryList.add(Category.European)
         }
-        if (!binding.checkBoxAsian.isChecked) {
-            ++checkedCount
+        if (binding.checkBoxAsian.isChecked) {
             categoryFilterViewModel.showRecipesByCategories(Category.Asian)
+            categoryList.add(Category.Asian)
         }
-        if (!binding.checkBoxPanasian.isChecked) {
-            ++checkedCount
+        if (binding.checkBoxPanasian.isChecked) {
             categoryFilterViewModel.showRecipesByCategories(Category.PanAsian)
+            categoryList.add(Category.PanAsian)
         }
-        if (!binding.checkBoxEastern.isChecked) {
-            ++checkedCount
+        if (binding.checkBoxEastern.isChecked) {
             categoryFilterViewModel.showRecipesByCategories(Category.Eastern)
+            categoryList.add(Category.Eastern)
         }
-        if (!binding.checkBoxAmerican.isChecked) {
-            ++checkedCount
+        if (binding.checkBoxAmerican.isChecked) {
             categoryFilterViewModel.showRecipesByCategories(Category.American)
+            categoryList.add(Category.American)
         }
-        if (!binding.checkBoxRussian.isChecked) {
-            ++checkedCount
+        if (binding.checkBoxRussian.isChecked) {
             categoryFilterViewModel.showRecipesByCategories(Category.Russian)
+            categoryList.add(Category.Russian)
         }
-        if (!binding.checkBoxMediterranean.isChecked) {
-            ++checkedCount
+        if (binding.checkBoxMediterranean.isChecked) {
             categoryFilterViewModel.showRecipesByCategories(Category.Mediterranean)
+            categoryList.add(Category.Mediterranean)
         }
-
         findNavController().popBackStack()
+        return categoryList
     }
+
 
     // чтобы передавать данные между фрагментами
     companion object {

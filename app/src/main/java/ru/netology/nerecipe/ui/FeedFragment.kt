@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.adapter.RecipesAdapter
 import ru.netology.nerecipe.databinding.FeedFragmentBinding
+import ru.netology.nerecipe.dto.Category
 import ru.netology.nerecipe.dto.Recipe
 import ru.netology.nerecipe.viewModel.RecipeViewModel
 
@@ -23,13 +24,6 @@ class FeedFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        //организация перехода к фрагменту separateRecipeFragment
-        viewModel.separateRecipeViewEvent.observe(this) { recipeCardId ->
-            val direction =
-                FeedFragmentDirections.actionFeedFragmentToSeparateRecipeFragment(recipeCardId)
-            findNavController().navigate(direction)
-        }
 
         //организация перехода к фрагменту NewOrEditedRecipeFragment
         viewModel.navigateToRecipeContentScreenEvent.observe(this) { recipe ->
@@ -67,6 +61,26 @@ class FeedFragment : Fragment() {
             viewModel.onAddButtonClicked()
         }
 
+        // показываем новый экран в нашем приложении
+        // данная ф-ция будет вызвана при завершении CategoryFilterFragment
+        setFragmentResultListener(
+            requestKey = CategoryFilterFragment.REQUEST_KEY
+        ) { requestKey, bundle ->
+            if (requestKey != CategoryFilterFragment.REQUEST_KEY) return@setFragmentResultListener
+            val category = bundle.getParcelableArrayList<Category>(
+                CategoryFilterFragment.RESULT_KEY
+            ) ?: return@setFragmentResultListener
+            viewModel.onOkButtonClicked(category)
+        }
+
+        // TODO продумать критерии фильтрации, которые нужно взять из другого фрагмента
+        /*viewModel.data.observe(viewLifecycleOwner) { recipes ->
+            val filteredRecipes = recipes.filter { it.category.isChecked }
+           // CategoryFilterFragment.onOkButtonClicked(binding)
+            viewModel.showRecipesByCategories(Category)
+            adapter.submitList(filteredRecipes)
+        }*/
+
         val search = binding.search
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
@@ -90,6 +104,14 @@ class FeedFragment : Fragment() {
             }
 
         })
+
+        //организация перехода к фрагменту separateRecipeFragment
+        viewModel.separateRecipeViewEvent.observe(viewLifecycleOwner) { recipeCardId ->
+            search.setQuery("", false)
+            val direction =
+                FeedFragmentDirections.actionFeedFragmentToSeparateRecipeFragment(recipeCardId)
+            findNavController().navigate(direction)
+        }
 
         }.root
 

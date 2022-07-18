@@ -22,12 +22,6 @@ import ru.netology.nerecipe.viewModel.RecipeViewModel
 
 class AppActivity : AppCompatActivity() {
 
-    /*private lateinit var navController: NavController
-    private lateinit var appBarConfiguration: AppBarConfiguration*/
-
-    /* private val viewModel: RecipeViewModel by viewModels()
-     private val feedFragment = FeedFragment()*/
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = AppActivityBinding.inflate(layoutInflater)
@@ -40,24 +34,10 @@ class AppActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.setupWithNavController(navController)
 
-//        // Setup the ActionBar with navController and 3 top level destinations
-//        appBarConfiguration = AppBarConfiguration(
-//            setOf(R.id.feedFragment, R.id.categoryFilterFragment, R.id.favouriteRecipeFragment)
-//        )
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-//
         navController.addOnDestinationChangedListener { _, _, arguments ->
             binding.bottomNavigation.isVisible =
                 arguments?.getBoolean("ShowAppBar", false) == true
         }
-
     }
-/*
-
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp(appBarConfiguration)
-    }
-*/
-
 
 }

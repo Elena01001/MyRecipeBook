@@ -12,8 +12,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ru.netology.nerecipe.R
+import ru.netology.nerecipe.adapter.RecipesAdapter
+import ru.netology.nerecipe.adapter.showCategories
 import ru.netology.nerecipe.data.RecipeRepository
 import ru.netology.nerecipe.databinding.NewRecipeFragmentBinding
+import ru.netology.nerecipe.databinding.RecipeBinding
 import ru.netology.nerecipe.dto.Category
 import ru.netology.nerecipe.dto.Recipe
 import ru.netology.nerecipe.viewModel.RecipeViewModel
@@ -23,6 +26,7 @@ class NewOrEditedRecipeFragment : Fragment() {
     private val args by navArgs<NewOrEditedRecipeFragmentArgs>()
 
     private val newOrEditedRecipeViewModel: RecipeViewModel by viewModels(ownerProducer = ::requireParentFragment)
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,35 +39,28 @@ class NewOrEditedRecipeFragment : Fragment() {
             with(binding) {
                 name.setText(thisRecipe.name)
                 content.setText(thisRecipe.content)
-                categoryRecipeCheckBox.check(R.id.checkBoxEuropean)
-                categoryRecipeCheckBox.check(R.id.checkBoxAsian)
+                categoryRecipeCheckBox.check(R.id.checkBoxEuropean) // по умолчанию при редактировании ставится
+                /*categoryRecipeCheckBox.check(R.id.checkBoxAsian)
                 categoryRecipeCheckBox.check(R.id.checkBoxPanasian)
                 categoryRecipeCheckBox.check(R.id.checkBoxEastern)
                 categoryRecipeCheckBox.check(R.id.checkBoxAmerican)
                 categoryRecipeCheckBox.check(R.id.checkBoxRussian)
-                categoryRecipeCheckBox.check(R.id.checkBoxMediterranean)
-                checkBoxEuropean.text = Category.European.toString()
-                checkBoxAsian.text = Category.Asian.toString()
-                checkBoxPanasian.text = Category.PanAsian.toString()
-                checkBoxEastern.text = Category.Eastern.toString()
-                checkBoxAmerican.text = Category.American.toString()
-                checkBoxRussian.text = Category.Russian.toString()
-                checkBoxMediterranean.text = Category.Mediterranean.toString()
+                categoryRecipeCheckBox.check(R.id.checkBoxMediterranean)*/
+                checkBoxEuropean.text = checkBoxEuropean.context.showCategories(Category.European)
+                checkBoxAsian.text = checkBoxAsian.context.showCategories(Category.Asian)
+                checkBoxPanasian.text = checkBoxPanasian.context.showCategories(Category.PanAsian)
+                checkBoxEastern.text = checkBoxEastern.context.showCategories(Category.Eastern)
+                checkBoxAmerican.text = checkBoxAmerican.context.showCategories(Category.American)
+                checkBoxRussian.text = checkBoxRussian.context.showCategories(Category.Russian)
+                checkBoxMediterranean.text =
+                    checkBoxMediterranean.context.showCategories(Category.Mediterranean)
             }
         }
 
         binding.name.requestFocus()
 
-        binding.categoryRecipeCheckBox.setOnCheckedChangeListener { _, id ->
-            when (id) {
-                R.id.checkBoxEuropean -> Category.European.toString()
-                R.id.checkBoxAsian -> Category.Asian.toString()
-                R.id.checkBoxPanasian -> Category.PanAsian.toString()
-                R.id.checkBoxEastern -> Category.Eastern.toString()
-                R.id.checkBoxAmerican -> Category.American.toString()
-                R.id.checkBoxRussian -> Category.Russian.toString()
-                R.id.checkBoxMediterranean -> Category.Mediterranean.toString()
-            }
+        binding.categoryRecipeCheckBox.setOnCheckedChangeListener { _, _ ->
+            getCheckedCategory(binding.categoryRecipeCheckBox.checkedRadioButtonId)
         }
         binding.ok.setOnClickListener {
             onOkButtonClicked(binding)
@@ -76,7 +73,7 @@ class NewOrEditedRecipeFragment : Fragment() {
             id = args.currentRecipe?.id ?: RecipeRepository.NEW_RECIPE_ID,
             name = binding.name.text.toString(),
             content = binding.content.text.toString(),
-            category = Category.valueOf(binding.categoryRecipeCheckBox.toString())
+            category = getCheckedCategory(binding.categoryRecipeCheckBox.checkedRadioButtonId)
         )
         if (emptyFieldsCheck(recipe = currentRecipe)) {
             val resultBundle = Bundle(1)
@@ -86,7 +83,20 @@ class NewOrEditedRecipeFragment : Fragment() {
         findNavController().popBackStack()
     }
 
+    // преобразуем отмеченную галочку в категорию
+    fun getCheckedCategory(checkedId: Int) = when (checkedId) {
+        R.id.checkBoxEuropean -> Category.European
+        R.id.checkBoxAsian -> Category.Asian
+        R.id.checkBoxPanasian -> Category.PanAsian
+        R.id.checkBoxEastern -> Category.Eastern
+        R.id.checkBoxAmerican -> Category.American
+        R.id.checkBoxRussian -> Category.Russian
+        R.id.checkBoxMediterranean -> Category.Mediterranean
+        else -> throw IllegalArgumentException("Unknown type: $checkedId")
+    }
 
+
+    // TODO как сделать так, чтобы надпись выскочила в данном фрагменте после нажатия ОК
     private fun emptyFieldsCheck(recipe: Recipe): Boolean {
         return if (recipe.name.isBlank() && recipe.content.isBlank()) {
             Toast.makeText(activity, "Заполните все поля", Toast.LENGTH_LONG).show()

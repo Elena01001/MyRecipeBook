@@ -40,12 +40,6 @@ class NewOrEditedRecipeFragment : Fragment() {
                 name.setText(thisRecipe.name)
                 content.setText(thisRecipe.content)
                 categoryRecipeCheckBox.check(R.id.checkBoxEuropean) // по умолчанию при редактировании ставится
-                /*categoryRecipeCheckBox.check(R.id.checkBoxAsian)
-                categoryRecipeCheckBox.check(R.id.checkBoxPanasian)
-                categoryRecipeCheckBox.check(R.id.checkBoxEastern)
-                categoryRecipeCheckBox.check(R.id.checkBoxAmerican)
-                categoryRecipeCheckBox.check(R.id.checkBoxRussian)
-                categoryRecipeCheckBox.check(R.id.checkBoxMediterranean)*/
                 checkBoxEuropean.text = checkBoxEuropean.context.showCategories(Category.European)
                 checkBoxAsian.text = checkBoxAsian.context.showCategories(Category.Asian)
                 checkBoxPanasian.text = checkBoxPanasian.context.showCategories(Category.PanAsian)
@@ -79,12 +73,13 @@ class NewOrEditedRecipeFragment : Fragment() {
             val resultBundle = Bundle(1)
             resultBundle.putParcelable(RESULT_KEY, currentRecipe)
             setFragmentResult(REQUEST_KEY, resultBundle)
+            findNavController().popBackStack() // возвращает на прошлый фрагмент
         }
-        findNavController().popBackStack()
+
     }
 
     // преобразуем отмеченную галочку в категорию
-    fun getCheckedCategory(checkedId: Int) = when (checkedId) {
+    private fun getCheckedCategory(checkedId: Int) = when (checkedId) {
         R.id.checkBoxEuropean -> Category.European
         R.id.checkBoxAsian -> Category.Asian
         R.id.checkBoxPanasian -> Category.PanAsian
@@ -95,8 +90,6 @@ class NewOrEditedRecipeFragment : Fragment() {
         else -> throw IllegalArgumentException("Unknown type: $checkedId")
     }
 
-
-    // TODO как сделать так, чтобы надпись выскочила в данном фрагменте после нажатия ОК
     private fun emptyFieldsCheck(recipe: Recipe): Boolean {
         return if (recipe.name.isBlank() && recipe.content.isBlank()) {
             Toast.makeText(activity, "Заполните все поля", Toast.LENGTH_LONG).show()

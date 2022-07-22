@@ -24,5 +24,6 @@
     <string name="author_name_hint">Автор</string>
     <string name="content_hint">Содержание рецепта</string>
     <string name="text_empty_list">Ой! Здесь пока ничего нет</string>
+    <string name="cancel_filters">Отмена фильтров</string>
     />
 </resources>

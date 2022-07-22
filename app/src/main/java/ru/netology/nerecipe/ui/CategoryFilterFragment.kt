@@ -3,6 +3,7 @@ package ru.netology.nerecipe.ui
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -43,44 +44,78 @@ class CategoryFilterFragment : Fragment() {
     fun onOkButtonClicked(binding: CategoryFiltersBinding): List<Category> {
 
         val categoryList = arrayListOf<Category>()
+        var checkedCount = 7
+        val nothingIsChecked = 0
 
         if (binding.checkBoxEuropean.isChecked) {
-            categoryFilterViewModel.showRecipesByCategories(Category.European)
             categoryList.add(Category.European)
+            categoryFilterViewModel.showRecipesByCategories(Category.European)
+            categoryFilterViewModel.setCategoryFilter = true
+        } else {
+            --checkedCount
         }
-        if (binding.checkBoxAsian.isChecked) {
-            categoryFilterViewModel.showRecipesByCategories(Category.Asian)
-            categoryList.add(Category.Asian)
-        }
-        if (binding.checkBoxPanasian.isChecked) {
-            categoryFilterViewModel.showRecipesByCategories(Category.PanAsian)
-            categoryList.add(Category.PanAsian)
-        }
-        if (binding.checkBoxEastern.isChecked) {
-            categoryFilterViewModel.showRecipesByCategories(Category.Eastern)
-            categoryList.add(Category.Eastern)
-        }
-        if (binding.checkBoxAmerican.isChecked) {
-            categoryFilterViewModel.showRecipesByCategories(Category.American)
-            categoryList.add(Category.American)
-        }
-        if (binding.checkBoxRussian.isChecked) {
-            categoryFilterViewModel.showRecipesByCategories(Category.Russian)
-            categoryList.add(Category.Russian)
-        }
-        if (binding.checkBoxMediterranean.isChecked) {
-            categoryFilterViewModel.showRecipesByCategories(Category.Mediterranean)
-            categoryList.add(Category.Mediterranean)
-        }
-        findNavController().popBackStack()
-        return categoryList
-    }
 
+        if (binding.checkBoxAsian.isChecked) {
+            categoryList.add(Category.Asian)
+            categoryFilterViewModel.showRecipesByCategories(Category.Asian)
+            categoryFilterViewModel.setCategoryFilter = true
+        } else {
+            --checkedCount
+        }
+
+        if (binding.checkBoxPanasian.isChecked) {
+            categoryList.add(Category.PanAsian)
+            categoryFilterViewModel.showRecipesByCategories(Category.PanAsian)
+            categoryFilterViewModel.setCategoryFilter = true
+        } else {
+            --checkedCount
+        }
+
+        if (binding.checkBoxEastern.isChecked) {
+            categoryList.add(Category.Eastern)
+            categoryFilterViewModel.showRecipesByCategories(Category.Eastern)
+            categoryFilterViewModel.setCategoryFilter = true
+        } else {
+            --checkedCount
+        }
+
+        if (binding.checkBoxAmerican.isChecked) {
+            categoryList.add(Category.American)
+            categoryFilterViewModel.showRecipesByCategories(Category.American)
+            categoryFilterViewModel.setCategoryFilter = true
+        } else {
+            --checkedCount
+        }
+
+        if (binding.checkBoxRussian.isChecked) {
+            categoryList.add(Category.Russian)
+            categoryFilterViewModel.showRecipesByCategories(Category.Russian)
+            categoryFilterViewModel.setCategoryFilter = true
+        } else {
+            --checkedCount
+        }
+
+        if (binding.checkBoxMediterranean.isChecked) {
+            categoryList.add(Category.Mediterranean)
+            categoryFilterViewModel.showRecipesByCategories(Category.Mediterranean)
+            categoryFilterViewModel.setCategoryFilter = true
+        } else {
+            --checkedCount
+        }
+
+        return if (checkedCount == nothingIsChecked) {
+            Toast.makeText(activity, "Ай-яй! Нельзя убирать все фильтры", Toast.LENGTH_LONG).show()
+            categoryList
+        } else {
+            findNavController().popBackStack()
+            categoryList
+        }
+
+    }
 
     // чтобы передавать данные между фрагментами
     companion object {
         const val REQUEST_KEY = "requestKey"
         const val RESULT_KEY = "newContent"
     }
-
 }

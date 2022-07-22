@@ -15,6 +15,7 @@ interface RecipeRepository {
     fun getAllRecipes()
     fun getCategory(category: Category)
 
+
     companion object {
         const val NEW_RECIPE_ID = 0L
     }

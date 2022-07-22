@@ -6,6 +6,7 @@ import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.AutoCompleteTextView
 import android.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -21,6 +22,7 @@ import ru.netology.nerecipe.viewModel.RecipeViewModel
 class FeedFragment : Fragment() {
 
     private val viewModel: RecipeViewModel by viewModels(ownerProducer = ::requireParentFragment)
+    private val filteredRecipes: ArrayList<Recipe> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,60 +63,54 @@ class FeedFragment : Fragment() {
             viewModel.onAddButtonClicked()
         }
 
-        // показываем новый экран в нашем приложении
-        // данная ф-ция будет вызвана при завершении CategoryFilterFragment
-        setFragmentResultListener(
-            requestKey = CategoryFilterFragment.REQUEST_KEY
-        ) { requestKey, bundle ->
-            if (requestKey != CategoryFilterFragment.REQUEST_KEY) return@setFragmentResultListener
-            val category = bundle.getParcelableArrayList<Category>(
-                CategoryFilterFragment.RESULT_KEY
-            ) ?: return@setFragmentResultListener
-            viewModel.onOkButtonClicked(category)
-        }
-
-        // TODO продумать критерии фильтрации, которые нужно взять из другого фрагмента
-        /*viewModel.data.observe(viewLifecycleOwner) { recipes ->
-            val filteredRecipes = recipes.filter { it.category.isChecked }
-           // CategoryFilterFragment.onOkButtonClicked(binding)
-            viewModel.showRecipesByCategories(Category)
-            adapter.submitList(filteredRecipes)
-        }*/
-
-        val search = binding.search
-        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
-            androidx.appcompat.widget.SearchView.OnQueryTextListener {
-
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
+        if (viewModel.setCategoryFilter) {
+            binding.undo.isVisible = viewModel.setCategoryFilter
+            binding.undo.setOnClickListener {
+                viewModel.clearFilter()
+                viewModel.setCategoryFilter = false
+                binding.undo.visibility = View.GONE
+                viewModel.data.observe(viewLifecycleOwner) { recipes ->
+                    adapter.submitList(recipes)
+                }
             }
+        } else {
+            val search = binding.search
+            search.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+                androidx.appcompat.widget.SearchView.OnQueryTextListener {
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText.isNullOrEmpty()) {
-                    adapter.submitList(viewModel.data.value)
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    if (newText.isNullOrEmpty()) {
+                        adapter.submitList(viewModel.data.value)
+                        return true
+                    }
+                    var recipeList = adapter.currentList
+                    recipeList = recipeList.filter { recipe ->
+                        recipe.name.lowercase().contains(newText.lowercase())
+                    }
+                    viewModel.searchRecipeByName(newText)
+                    adapter.submitList(recipeList)
                     return true
                 }
-                var recipeList = adapter.currentList
-                recipeList = recipeList.filter { recipe ->
-                    recipe.name.lowercase().contains(newText.lowercase())
-                }
-                viewModel.searchRecipeByName(newText)
-                adapter.submitList(recipeList)
-                return true
-            }
 
-        })
+            })
+
+        }
+
 
         //организация перехода к фрагменту separateRecipeFragment
         viewModel.separateRecipeViewEvent.observe(viewLifecycleOwner) { recipeCardId ->
-            search.setQuery("", false)
+            binding.search.setQuery("", false)
             val direction =
                 FeedFragmentDirections.actionFeedFragmentToSeparateRecipeFragment(recipeCardId)
             findNavController().navigate(direction)
         }
 
-        }.root
+    }.root
 
-   }
+}
 
 

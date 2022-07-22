@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import androidx.navigation.fragment.findNavController
 import ru.netology.nerecipe.R
 import ru.netology.nerecipe.adapter.RecipeInteractionListener
@@ -30,10 +31,15 @@ class RecipeViewModel(
         dao = AppDb.getInstance(context = application).recipeDao
     )
 
-    val data get() = repository.data
+    private var categoriesFilter: List<Category> = Category.values().toList()
+    //val data get() = repository.data
+    var setCategoryFilter = false
+
+    val data get() = repository.data.map { list ->
+        list.filter { categoriesFilter.contains(it.category) }
+    }
 
     val separateRecipeViewEvent = SingleLiveEvent<Long>()
-
     // Эта LiveData хранит текст рецепта, который редактируется, или null, если новый текст добавляется пользователем
     val navigateToRecipeContentScreenEvent = SingleLiveEvent<Recipe?>()
     val currentRecipe = MutableLiveData<Recipe?>(null)
@@ -41,6 +47,12 @@ class RecipeViewModel(
 
     init {
         favoriteFilter.value = false
+    }
+
+    fun showRecipesByCategories(category: Category) {
+        repository.data.map { list ->
+            list.filter { categoriesFilter.contains(category) }
+        }
     }
 
     fun onSaveButtonClicked(recipe: Recipe) { // нужно научить, когда пришел новый рец, а когда неновый для редактирования
@@ -85,44 +97,9 @@ class RecipeViewModel(
         navigateToRecipeContentScreenEvent.value = recipe
     }
 
-    fun showRecipesByCategories(category: Category) {
+   /* fun showRecipesByCategories(category: Category) {
         repository.getCategory(category)
 
-    }
-
-    lateinit var binding: CategoryFiltersBinding
-
-    fun onOkButtonClicked(categoryList: ArrayList<Category>): List<Category> {
-
-        if (binding.checkBoxEuropean.isChecked) {
-            showRecipesByCategories(Category.European)
-            categoryList.add(Category.European)
-        }
-        if (binding.checkBoxAsian.isChecked) {
-            showRecipesByCategories(Category.Asian)
-            categoryList.add(Category.Asian)
-        }
-        if (binding.checkBoxPanasian.isChecked) {
-            showRecipesByCategories(Category.PanAsian)
-            categoryList.add(Category.PanAsian)
-        }
-        if (binding.checkBoxEastern.isChecked) {
-            showRecipesByCategories(Category.Eastern)
-            categoryList.add(Category.Eastern)
-        }
-        if (binding.checkBoxAmerican.isChecked) {
-            showRecipesByCategories(Category.American)
-            categoryList.add(Category.American)
-        }
-        if (binding.checkBoxRussian.isChecked) {
-            showRecipesByCategories(Category.Russian)
-            categoryList.add(Category.Russian)
-        }
-        if (binding.checkBoxMediterranean.isChecked) {
-            showRecipesByCategories(Category.Mediterranean)
-            categoryList.add(Category.Mediterranean)
-        }
-        return categoryList
-    }
+    }*/
 
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nerecipe.adapter.RecipesAdapter
@@ -41,7 +42,7 @@ class CategoryFilterFragment : Fragment() {
 
     }.root
 
-    fun onOkButtonClicked(binding: CategoryFiltersBinding): List<Category> {
+    fun onOkButtonClicked(binding: CategoryFiltersBinding) {
 
         val categoryList = arrayListOf<Category>()
         var checkedCount = 7
@@ -49,7 +50,6 @@ class CategoryFilterFragment : Fragment() {
 
         if (binding.checkBoxEuropean.isChecked) {
             categoryList.add(Category.European)
-            categoryFilterViewModel.showRecipesByCategories(Category.European)
             categoryFilterViewModel.setCategoryFilter = true
         } else {
             --checkedCount
@@ -57,7 +57,6 @@ class CategoryFilterFragment : Fragment() {
 
         if (binding.checkBoxAsian.isChecked) {
             categoryList.add(Category.Asian)
-            categoryFilterViewModel.showRecipesByCategories(Category.Asian)
             categoryFilterViewModel.setCategoryFilter = true
         } else {
             --checkedCount
@@ -65,7 +64,6 @@ class CategoryFilterFragment : Fragment() {
 
         if (binding.checkBoxPanasian.isChecked) {
             categoryList.add(Category.PanAsian)
-            categoryFilterViewModel.showRecipesByCategories(Category.PanAsian)
             categoryFilterViewModel.setCategoryFilter = true
         } else {
             --checkedCount
@@ -73,7 +71,6 @@ class CategoryFilterFragment : Fragment() {
 
         if (binding.checkBoxEastern.isChecked) {
             categoryList.add(Category.Eastern)
-            categoryFilterViewModel.showRecipesByCategories(Category.Eastern)
             categoryFilterViewModel.setCategoryFilter = true
         } else {
             --checkedCount
@@ -81,7 +78,6 @@ class CategoryFilterFragment : Fragment() {
 
         if (binding.checkBoxAmerican.isChecked) {
             categoryList.add(Category.American)
-            categoryFilterViewModel.showRecipesByCategories(Category.American)
             categoryFilterViewModel.setCategoryFilter = true
         } else {
             --checkedCount
@@ -89,7 +85,6 @@ class CategoryFilterFragment : Fragment() {
 
         if (binding.checkBoxRussian.isChecked) {
             categoryList.add(Category.Russian)
-            categoryFilterViewModel.showRecipesByCategories(Category.Russian)
             categoryFilterViewModel.setCategoryFilter = true
         } else {
             --checkedCount
@@ -97,25 +92,26 @@ class CategoryFilterFragment : Fragment() {
 
         if (binding.checkBoxMediterranean.isChecked) {
             categoryList.add(Category.Mediterranean)
-            categoryFilterViewModel.showRecipesByCategories(Category.Mediterranean)
             categoryFilterViewModel.setCategoryFilter = true
         } else {
             --checkedCount
         }
 
-        return if (checkedCount == nothingIsChecked) {
+        if (checkedCount == nothingIsChecked) {
             Toast.makeText(activity, "Ай-яй! Нельзя убирать все фильтры", Toast.LENGTH_LONG).show()
-            categoryList
         } else {
+            categoryFilterViewModel.showRecipesByCategories(categoryList)
+            val resultBundle = Bundle(1)
+            resultBundle.putParcelableArrayList(CHECKBOX_KEY, categoryList)
+            setFragmentResult(CHECKBOX_KEY, resultBundle)
             findNavController().popBackStack()
-            categoryList
         }
 
     }
 
     // чтобы передавать данные между фрагментами
     companion object {
-        const val REQUEST_KEY = "requestKey"
-        const val RESULT_KEY = "newContent"
+        const val CHECKBOX_KEY = "checkBoxContent"
+        const val CHECKBOX_RESULT_KEY = "checkBoxResult"
     }
 }

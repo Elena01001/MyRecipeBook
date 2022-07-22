@@ -6,6 +6,7 @@ import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.AutoCompleteTextView
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -22,7 +23,6 @@ import ru.netology.nerecipe.viewModel.RecipeViewModel
 class FeedFragment : Fragment() {
 
     private val viewModel: RecipeViewModel by viewModels(ownerProducer = ::requireParentFragment)
-    private val filteredRecipes: ArrayList<Recipe> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +46,18 @@ class FeedFragment : Fragment() {
                 NewOrEditedRecipeFragment.RESULT_KEY
             ) ?: return@setFragmentResultListener
             viewModel.onSaveButtonClicked(newRecipe)
+        }
+
+        // показываем новый экран в нашем приложении
+        // данная ф-ция будет вызвана при завершении CategoryFilterFragment
+        setFragmentResultListener(
+            requestKey = CategoryFilterFragment.CHECKBOX_KEY
+        ) { requestKey, bundle ->
+            if (requestKey != CategoryFilterFragment.CHECKBOX_KEY) return@setFragmentResultListener
+            val categories = bundle.getParcelableArrayList<Category>(
+                CategoryFilterFragment.CHECKBOX_RESULT_KEY
+            ) ?: return@setFragmentResultListener
+            viewModel.showRecipesByCategories(categories)
         }
     }
 
@@ -74,8 +86,7 @@ class FeedFragment : Fragment() {
                 }
             }
         } else {
-            val search = binding.search
-            search.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+            binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
                 androidx.appcompat.widget.SearchView.OnQueryTextListener {
 
                 override fun onQueryTextSubmit(query: String?): Boolean {
@@ -92,14 +103,17 @@ class FeedFragment : Fragment() {
                         recipe.name.lowercase().contains(newText.lowercase())
                     }
                     viewModel.searchRecipeByName(newText)
-                    adapter.submitList(recipeList)
+
+                    if (recipeList.isEmpty()) {
+                        Toast.makeText(context, "Ничего нетю..", Toast.LENGTH_SHORT).show()
+                        adapter.submitList(recipeList)
+                    } else {
+                        adapter.submitList(recipeList)
+                    }
                     return true
                 }
-
             })
-
         }
-
 
         //организация перехода к фрагменту separateRecipeFragment
         viewModel.separateRecipeViewEvent.observe(viewLifecycleOwner) { recipeCardId ->

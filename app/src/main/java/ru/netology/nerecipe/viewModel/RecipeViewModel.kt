@@ -32,14 +32,17 @@ class RecipeViewModel(
     )
 
     private var categoriesFilter: List<Category> = Category.values().toList()
+
     //val data get() = repository.data
     var setCategoryFilter = false
 
-    val data get() = repository.data.map { list ->
-        list.filter { categoriesFilter.contains(it.category) }
-    }
+    val data
+        get() = repository.data.map { list ->
+            list.filter { categoriesFilter.contains(it.category) }
+        }
 
     val separateRecipeViewEvent = SingleLiveEvent<Long>()
+
     // Эта LiveData хранит текст рецепта, который редактируется, или null, если новый текст добавляется пользователем
     val navigateToRecipeContentScreenEvent = SingleLiveEvent<Recipe?>()
     val currentRecipe = MutableLiveData<Recipe?>(null)
@@ -49,9 +52,9 @@ class RecipeViewModel(
         favoriteFilter.value = false
     }
 
-    fun showRecipesByCategories(category: Category) {
+    fun showRecipesByCategories(categories: List<Category>) {
         repository.data.map { list ->
-            list.filter { categoriesFilter.contains(category) }
+            list.filter { categories.contains(it.category) }
         }
     }
 
@@ -97,9 +100,9 @@ class RecipeViewModel(
         navigateToRecipeContentScreenEvent.value = recipe
     }
 
-   /* fun showRecipesByCategories(category: Category) {
-        repository.getCategory(category)
+    /* fun showRecipesByCategories(category: Category) {
+         repository.getCategory(category)
 
-    }*/
+     }*/
 
 }

@@ -36,10 +36,9 @@ class RecipeViewModel(
     //val data get() = repository.data
     var setCategoryFilter = false
 
-    val data
-        get() = repository.data.map { list ->
-            list.filter { categoriesFilter.contains(it.category) }
-        }
+    val data = repository.data.map { list ->
+        list.filter { categoriesFilter.contains(it.category) }
+    }
 
     val separateRecipeViewEvent = SingleLiveEvent<Long>()
 
@@ -53,9 +52,8 @@ class RecipeViewModel(
     }
 
     fun showRecipesByCategories(categories: List<Category>) {
-        repository.data.map { list ->
-            list.filter { categories.contains(it.category) }
-        }
+        categoriesFilter = categories
+        repository.update()
     }
 
     fun onSaveButtonClicked(recipe: Recipe) { // нужно научить, когда пришел новый рец, а когда неновый для редактирования
@@ -99,10 +97,5 @@ class RecipeViewModel(
     override fun onRecipeItemClicked(recipe: Recipe) {
         navigateToRecipeContentScreenEvent.value = recipe
     }
-
-    /* fun showRecipesByCategories(category: Category) {
-         repository.getCategory(category)
-
-     }*/
 
 }

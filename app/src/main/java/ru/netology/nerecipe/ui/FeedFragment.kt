@@ -55,7 +55,7 @@ class FeedFragment : Fragment() {
         ) { requestKey, bundle ->
             if (requestKey != CategoryFilterFragment.CHECKBOX_KEY) return@setFragmentResultListener
             val categories = bundle.getParcelableArrayList<Category>(
-                CategoryFilterFragment.CHECKBOX_RESULT_KEY
+                CategoryFilterFragment.CHECKBOX_KEY
             ) ?: return@setFragmentResultListener
             viewModel.showRecipesByCategories(categories)
         }
@@ -77,10 +77,12 @@ class FeedFragment : Fragment() {
 
         if (viewModel.setCategoryFilter) {
             binding.undo.isVisible = viewModel.setCategoryFilter
+            binding.fab.visibility = View.GONE
             binding.undo.setOnClickListener {
-                viewModel.clearFilter()
+                viewModel.showRecipesByCategories(Category.values().toList())
                 viewModel.setCategoryFilter = false
                 binding.undo.visibility = View.GONE
+                binding.fab.visibility = View.VISIBLE
                 viewModel.data.observe(viewLifecycleOwner) { recipes ->
                     adapter.submitList(recipes)
                 }

@@ -14,6 +14,7 @@ interface RecipeRepository {
     fun search(recipeName: String)
     fun getAllRecipes()
     fun getCategory(category: Category)
+    fun update()
 
 
     companion object {

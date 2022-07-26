@@ -45,5 +45,8 @@ interface RecipeDao {
     @Query("SELECT * FROM recipes WHERE category = :categoryRecipe")
     fun getCategory(categoryRecipe: Category): LiveData<List<RecipeEntity>>
 
+    @Query("UPDATE recipes SET name = name")
+    fun update()
+
 
 }

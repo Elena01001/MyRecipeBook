@@ -42,7 +42,7 @@ class CategoryFilterFragment : Fragment() {
 
     }.root
 
-    fun onOkButtonClicked(binding: CategoryFiltersBinding) {
+    private fun onOkButtonClicked(binding: CategoryFiltersBinding) {
 
         val categoryList = arrayListOf<Category>()
         var checkedCount = 7
@@ -106,12 +106,10 @@ class CategoryFilterFragment : Fragment() {
             setFragmentResult(CHECKBOX_KEY, resultBundle)
             findNavController().popBackStack()
         }
-
     }
 
     // чтобы передавать данные между фрагментами
     companion object {
         const val CHECKBOX_KEY = "checkBoxContent"
-        const val CHECKBOX_RESULT_KEY = "checkBoxResult"
     }
 }

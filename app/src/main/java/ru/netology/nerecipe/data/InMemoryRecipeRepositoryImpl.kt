@@ -139,6 +139,10 @@ object InMemoryRecipeRepositoryImpl : RecipeRepository {
         data.value = recipes
     }
 
+    override fun update() {
+        data.value = recipes
+    }
+
     private fun update(recipe: Recipe) {
         recipes = recipes.map {
             if (it.id == recipe.id) recipe else it // Если Ид совпадают, то возвращаем новый рецепт, если нет, то старый рецепт

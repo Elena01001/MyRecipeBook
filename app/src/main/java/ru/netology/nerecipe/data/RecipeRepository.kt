@@ -12,7 +12,6 @@ interface RecipeRepository {
     fun delete(recipeId: Long)
     fun addToFavourites(recipeId: Long)
     fun search(recipeName: String)
-    fun getAllRecipes()
     fun getCategory(category: Category)
     fun update()
 

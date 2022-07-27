@@ -128,10 +128,6 @@ object InMemoryRecipeRepositoryImpl : RecipeRepository {
         data.value = recipes
     }
 
-    override fun getAllRecipes() {
-         data.value = recipes
-    }
-
     override fun getCategory(category: Category) {
         recipes.find {
             it.category == category

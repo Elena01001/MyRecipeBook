@@ -32,12 +32,6 @@ class RoomRecipeRepositoryImpl(
         dao.search(recipeName)
     }
 
-    override fun getAllRecipes() {
-        data = dao.getAll().map { entities ->
-            entities.map { it.toModel() }
-        }
-    }
-
     override fun getCategory(category: Category) {
         dao.getCategory(category)
     }

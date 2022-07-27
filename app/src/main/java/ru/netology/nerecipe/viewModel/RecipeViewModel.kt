@@ -78,9 +78,6 @@ class RecipeViewModel(
     }
 
     fun searchRecipeByName(recipeName: String) = repository.search(recipeName)
-    fun clearFilter() {
-        repository.getAllRecipes()
-    }
 
     override fun onRemoveButtonClicked(recipe: Recipe) = repository.delete(recipe.id)
 
